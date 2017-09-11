@@ -22,7 +22,7 @@
     assert:
       that: primary_ipv4_address == ipv4_address
 
-  - name: Guess hostname if missing
+  - name: Set default hostname if not supplied
     set_fact:
       hostname: '{{ansible_host}}'
     when: not (hostname is defined)
@@ -36,11 +36,18 @@
 
   tasks:
 
-    #- debug: var=play_hosts
-    #- debug: var=network
-    #- debug: var=hostname
+  - debug: var=play_hosts
+  #- debug: var=network
+  #- debug: var=hostname
     
-    #- debug: var=listen_address
-    #- debug: var=primary_ipv4_address
-    #- debug: var=ipv4_address
+  #- debug: var=listen_address
+  #- debug: var=primary_ipv4_address
+  #- debug: var=ipv4_address
 
+  - name: Update /etc/hosts with hostnames of this swarm
+    lineinfile:
+      dest: /etc/hosts
+      line: '{{hostvars[item].ipv4_address}} {{hostvars[item].hostname}} {{item}}'
+      insertafter: '^127\.0\.1\.1 .*'
+    with_items: '{{play_hosts}}'
+    sudo: yes
