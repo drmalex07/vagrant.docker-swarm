@@ -29,7 +29,7 @@
     sudo_user: root
 
   - name: Run a hello-world Docker container
-    shell: docker run hello-world 
+    shell: docker run --rm hello-world 
     sudo: yes
     sudo_user: root
   
