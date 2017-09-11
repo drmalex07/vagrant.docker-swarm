@@ -1,0 +1,46 @@
+---
+
+- hosts: all
+
+  pre_tasks:
+
+  - name: Check that a proper ipv4 network is specified
+    assert:
+      that: (network is defined) and (network | ipaddr("network"))
+  
+  - name: Check primary ipv4 address falls into specified network
+    assert:
+      that: (ipv4_address is defined) and (ipv4_address | ipaddr(network))
+      
+  - set_fact:
+      primary_ipv4_address: "{{ansible_all_ipv4_addresses| ipaddr(network)| first}}"
+  
+  - set_fact:    
+      listen_address: '{{primary_ipv4_address}}'
+  
+  - name: Check that primary ipv4 address is discovered into facts
+    assert:
+      that: primary_ipv4_address == ipv4_address
+
+  - name: Guess hostname if missing
+    set_fact:
+      hostname: '{{ansible_host}}'
+    when: not (hostname is defined)
+
+  vars:
+  
+    docker_compose_version: '1.16.1'
+
+  roles:
+  - 'docker-engine'
+
+  tasks:
+
+    #- debug: var=play_hosts
+    #- debug: var=network
+    #- debug: var=hostname
+    
+    #- debug: var=listen_address
+    #- debug: var=primary_ipv4_address
+    #- debug: var=ipv4_address
+

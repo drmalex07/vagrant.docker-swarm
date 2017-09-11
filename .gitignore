@@ -1,0 +1,6 @@
+/.vagrant
+
+/hosts.conf
+/hosts.yml
+
+/play.retry
