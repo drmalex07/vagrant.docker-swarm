@@ -1,6 +1,10 @@
 /.vagrant
 
 /hosts.conf
+/hosts-*.conf
 /hosts.yml
+/hosts-*.yml
+
+/pyenv
 
 /play.retry
