@@ -28,6 +28,9 @@
     set_fact:
       hostname: '{{ansible_host}}'
     when: not (hostname is defined)
+   
+  - set_fact:
+      hostname_s: '{{hostname.split(".") | first}}'
 
   vars:
   
@@ -54,10 +57,37 @@
       insertafter: '^127\.0\.1\.1 .*'
     with_items: '{{play_hosts}}'
     sudo: yes
+ 
+#
+# 2. Reboot all hosts
+#
 
+- hosts: all
+
+  tasks:
+  
+  - name: Reboot for group membership to be re-evaluated
+    shell: reboot
+    sudo: yes
+    async: 30
+    poll: 0
+    ignore_errors: true
+  
+  - name: Wait for play hosts to be up again
+    wait_for:
+      host: '{{hostvars[item].ansible_host}}'
+      port: 22
+      state: started
+      delay: 10
+      timeout: 40
+    with_items: '{{play_hosts}}' 
+    connection: local
+  
+  - name:
+    shell: uptime
 
 #
-# 2. Initialize manager as a swarm manager node
+# 3. Initialize manager as a swarm manager node
 #
 
 - hosts: manager
@@ -78,7 +108,7 @@
       msg: The join token is {{swarm_join_token}}
 
 #
-# 3. Join worker nodes into swarm
+# 4. Join worker nodes into swarm
 #
 
 - hosts: workers

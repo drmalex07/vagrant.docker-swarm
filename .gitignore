@@ -1,5 +1,7 @@
 /.vagrant
 
+/secrets/
+
 /hosts.conf
 /hosts-*.conf
 /hosts.yml
@@ -8,3 +10,6 @@
 /pyenv
 
 /play.retry
+
+/scratch.yml
+/scratch.retry

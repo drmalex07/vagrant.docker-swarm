@@ -19,11 +19,23 @@ inventory_groups = inventory['all']['children']
 #
 
 Vagrant.configure(2) do |config|
-  
+
   config.vm.box = "debian/jessie64"
   config.vm.box_check_update = false
   
   config.vm.synced_folder ".", "/vagrant", type: "rsync"
+
+  inventory_groups['workers']['hosts'].keys.each do |worker_name|
+    config.vm.define worker_name do |worker|
+      h = inventory_groups['workers']['hosts'][worker_name]
+
+      worker.vm.network "private_network", ip: h['ipv4_address']
+      worker.vm.provider "virtualbox" do |vb|
+        vb.name = h['hostname']
+        vb.memory = 512
+      end
+    end
+  end
 
   config.vm.define "manager" do |manager|
     h = inventory_groups['manager']['hosts']['manager']
@@ -43,25 +55,17 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  inventory_groups['workers']['hosts'].keys.each do |worker_name|
-    config.vm.define worker_name do |worker|
-      h = inventory_groups['workers']['hosts'][worker_name]
-
-      worker.vm.network "private_network", ip: h['ipv4_address']
-      worker.vm.provider "virtualbox" do |vb|
-        vb.name = h['hostname']
-        vb.memory = 768
-      end
-    end
-  end
 
   # Define common provisioning tasks
 
+  config.vm.provision "file", source: "secrets/id_rsa", destination: ".ssh/id_rsa"
+  config.vm.provision "shell", path: "copy-key.sh", privileged: false
+  
   config.vm.provision "file", source: "profile", destination: ".profile"
   config.vm.provision "file", source: "bashrc", destination: ".bashrc"
   
-  config.vm.provision "file", source: "~/.vimrc", destination: ".vimrc"
-  config.vm.provision "file", source: "~/.vim/", destination: "."
+  #config.vm.provision "file", source: "~/.vimrc", destination: ".vimrc"
+  #config.vm.provision "file", source: "~/.vim/", destination: "."
 
   #config.vm.provision "shell", path: "configure-apt-proxy.sh"
   

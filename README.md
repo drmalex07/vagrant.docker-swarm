@@ -2,15 +2,22 @@
 
 ## 0. Prerequisites ##
 
+### 0.1 Ansible Environment ###
+
 You must install `Ansible` on the control machine, preferably in a virtual Python environment:
 
     virtualenv pyenv
     . pyenv/bin/activate
     pip install ansible==2.2 netaddr
 
+### 0.2 Keys ###
+
+Place your PEM-formatted private key under `secrets/id_sa`. Ensure the key file has proper permissions (`0600`).  
+
 ## 1. Prepare your inventory  ##
 
-An single inventory file should be created at `hosts.yml`. Both `vagrant` and `ansible` will use this. An example inventory file can be found [here](hosts.yml.example).
+An single inventory file should be created at `hosts.yml`. Both `vagrant` and `ansible` will use this same inventory.
+An example inventory file can be found [here](hosts.yml.example).
 
 ## 2.1 Setup with Vagrant and Ansible ##
 
@@ -18,7 +25,7 @@ If we want a full Vagrant environment (of course we will also need `vagrant` ins
 
     vagrant up
 
-In this case, `vagrant` will provide the virtual machines (via virtualbox) and setup the private network, 
+In this case, `vagrant` will provide the virtual machines (via virtualbox), will setup the private network, 
 and then will delegate to an `ansible` playbook to actually setup the swarm nodes.
 
 ## 2.2 Setup with Ansible only ##
