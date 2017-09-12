@@ -28,9 +28,6 @@
     set_fact:
       hostname: '{{ansible_host}}'
     when: not (hostname is defined)
-   
-  - set_fact:
-      hostname_s: '{{hostname.split(".") | first}}'
 
   vars:
   

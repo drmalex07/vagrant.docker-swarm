@@ -6,9 +6,9 @@
 network=10.0.4.0/24
 
 [manager]
-manager ansible_host=manager-s1.internal hostname=manager-s1 ipv4_address=10.0.4.40
+manager ansible_host=manager-s1.internal hostname=manager-s1 ipv4_address=10.0.4.40 fqdn=manager-s1.internal
 
 [workers]
-worker-1 ansible_host=worker-n1-s1.internal hostname=worker-n1-s1 ipv4_address=10.0.4.41
-worker-2 ansible_host=worker-n2-s1.internal hostname=worker-n2-s1 ipv4_address=10.0.4.42
+worker-1 ansible_host=worker-n1-s1.internal hostname=worker-n1-s1 ipv4_address=10.0.4.41 fqdn=worker-n1-s1.internal
+worker-2 ansible_host=worker-n2-s1.internal hostname=worker-n2-s1 ipv4_address=10.0.4.42 fqdn=worker-n2-s1.internal
 
