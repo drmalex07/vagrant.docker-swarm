@@ -11,9 +11,10 @@
 
  - name: Add user to docker group
    user:
-     name: '{{ansible_ssh_user}}'
+     name: '{{ansible_env.USER}}'
      groups: docker
      append: yes
+   when: ansible_env.USER != 'root'
    sudo: yes
    sudo_user: root
 
