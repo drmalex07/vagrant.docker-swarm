@@ -57,12 +57,16 @@
 #
 # 2. Reboot all hosts
 #
+# This is needed because:
+#  - group membership must be re-evaluated
+#  - kernel must be loaded with different parameters (cgroups for memory)
+#
 
 - hosts: all
 
   tasks:
   
-  - name: Reboot for group membership to be re-evaluated
+  - name: Reboot
     shell: sleep 2 && reboot
     sudo: yes
     async: 30
@@ -76,14 +80,25 @@
       port: 22
       state: started
       delay: 10
-      timeout: 40
+      timeout: 45
     with_items: '{{play_hosts}}' 
     connection: local
     tags: ['reboot']
   
   - name:
-    shell: uptime
+    shell: sleep 2 && uptime
     tags: ['reboot']
+
+  # Note This is usually not needed, but there are some cases when listening sockets 
+  # are not properly initialized and so docker.service is marked as failed. I assume   
+  # this is caused by virtual network interfaces not up when sockets are activated by systemd
+  - name: Restart docker service
+    systemd:
+      name: docker.service
+      state: restarted
+    sudo: yes
+    tags: ['reboot']
+    
 
 #
 # 3. Initialize manager as a swarm manager node

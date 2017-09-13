@@ -2,6 +2,8 @@
 
 /secrets/
 
+hosts.txt
+
 /hosts.conf
 /hosts-*.conf
 /hosts.yml
