@@ -27,11 +27,6 @@
     apt: pkg=docker-ce state=latest
     sudo: yes
     sudo_user: root
-
-  - name: Run a hello-world Docker container
-    shell: docker run --rm hello-world 
-    sudo: yes
-    sudo_user: root
   
   - name: Download docker-compose binary
     get_url:

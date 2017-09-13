@@ -38,8 +38,7 @@
 
   tasks:
 
-  - debug: var=play_hosts
-  
+  #- debug: var=play_hosts
   #- debug: var=network
   #- debug: var=hostname
     
@@ -64,11 +63,12 @@
   tasks:
   
   - name: Reboot for group membership to be re-evaluated
-    shell: reboot
+    shell: sleep 2 && reboot
     sudo: yes
     async: 30
     poll: 0
     ignore_errors: true
+    tags: ['reboot']
   
   - name: Wait for play hosts to be up again
     wait_for:
@@ -79,9 +79,11 @@
       timeout: 40
     with_items: '{{play_hosts}}' 
     connection: local
+    tags: ['reboot']
   
   - name:
     shell: uptime
+    tags: ['reboot']
 
 #
 # 3. Initialize manager as a swarm manager node

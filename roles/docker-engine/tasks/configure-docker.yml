@@ -16,8 +16,6 @@
      dest: /etc/systemd/system/docker.socket.d/10-socket.conf
      mode: 0600
    when: listen_address is defined 
-   notify:
-   - 'restart-docker'
    sudo: yes
    sudo_user: root
 

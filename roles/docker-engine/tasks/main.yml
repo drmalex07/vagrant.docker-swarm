@@ -8,6 +8,19 @@
  - include: install-docker.yml
  
  - include: configure-docker.yml
+ 
+ - name: Restart docker sockets
+   systemd:
+     name: docker.socket
+     daemon_reload: yes
+     state: restarted
+   sudo: yes
+   sudo_user: root
+
+ - name: Run a hello-world Docker container
+   shell: docker run --rm hello-world 
+   sudo: yes
+   sudo_user: root
 
  - name: Add user to docker group
    user:
@@ -22,5 +35,4 @@
    file: 
      path: ~/bin 
      state: directory
-
 
