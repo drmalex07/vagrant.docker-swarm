@@ -33,6 +33,8 @@ and then will delegate to an `ansible` playbook to actually setup the swarm node
 If the target machines (either virtual or physical) are already setup and networked (usually in a private network),
 then we can directly play the Ansible playbook:
 
+    # Prepare target hosts
+    ansible -m script -a install-ansible-prereqs.sh all
+    # Play
     ansible-playbook play.yml
-
 
