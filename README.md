@@ -12,7 +12,7 @@ You must install `Ansible` on the control machine, preferably in a virtual Pytho
 
 ### 0.2 Keys ###
 
-Place your PEM-formatted private key under `secrets/id_sa`. Ensure the key file has proper permissions (`0600`).  
+Place your PEM-formatted private key under `secrets/id_rsa`. Ensure the key file has proper permissions (`0600`).  
 
 ## 1. Prepare your inventory  ##
 
